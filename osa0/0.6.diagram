@@ -1,0 +1,27 @@
+kayttaja->selain:
+note right of kayttaja
+kayttaja kirjottaa tekstiä kenttään ja klikkaa "Talleta"
+end note
+
+note right of selain
+Selain lähettää uuden muistiinpanon palvelimelle JSON-muodossa
+end note
+selain->palvelin: POST https://fullstack-exampleapp.herokuapp.com/new_note
+note right of palvelin
+Palvelin tallentaa
+muistiinpanon tietokantaan
+end note
+note left of palvelin
+Palvelin ilmoittaa selaimelle talletuksen onnistumisesta
+end note
+palvelin->selain: Status: 201 Created
+
+note right of selain
+  Selain päivittää sivun elementtipuun DOM-ohjelmointirajapinnan 
+  avulla, lisäten käyttäjän syöttämän muistiinpanon listan loppuun
+end note
+note left of selain
+ Sivu on valmis, selain tuottaa sen käyttäjän nähtäville
+ jo aiemmin ladatun main.css-tiedoston määrällä tyylillä
+end note
+selain->kayttaja:

@@ -1,0 +1,35 @@
+kayttaja->selain:
+note right of kayttaja
+kayttaja kirjottaa osoiteriville
+https://fullstack-exampleapp.herokuapp.com/spa
+end note
+note right of selain
+  Selain pyytää sivun HTML-koodin palvelimelta
+end note
+selain->palvelin: GET https://fullstack-exampleapp.herokuapp.com/spa
+
+palvelin->selain: status 200, sivun HTML-koodi
+note right of selain
+  Selain tulkitsee koodin, ja pyytää palvelimelta
+  siinä viitatut kaksi lisädokumenttia
+end note
+selain->palvelin: GET https://fullstack-exampleapp.herokuapp.com/main.css
+palvelin->selain: status 200, main.css
+selain->palvelin: GET https://fullstack-exampleapp.herokuapp.com/spa.js
+palvelin->selain: status 200, spa.js
+note left of palvelin
+  Selain ajaa spa.js- tiedoston koodin, ja pyytää palvelimelta
+  siinä viitattavan tiedoston data.json, joka sisältää muistiinpanodatan
+end note
+selain->palvelin: GET https://fullstack-exampleapp.herokuapp.com/data.json
+palvelin->selain: status 200, data.json
+note left of palvelin
+  Selain parsii data.json-tiedoston sisällön, ja lisää sen sivun
+  elementtipuuhun DOM-ohjelmointirajapinnan avulla, kuten
+  spa.js-koodi ohjaa tekemään. Tämän jälkeen koodi ajetaan loppuun.
+end note
+note left of selain
+ Sivu on valmis, selain tuottaa sen käyttäjän nähtäville
+ main.css-tiedoston määrällä tyylillä
+end note
+selain->kayttaja:

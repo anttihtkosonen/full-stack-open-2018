@@ -1,0 +1,48 @@
+kayttaja->selain:
+note right of kayttaja
+kayttaja kirjottaa tekstiä kenttään ja klikkaa "Talleta"
+end note
+
+note right of selain
+Selain lähettää uuden muistiinpanon palvelimelle html-tiedostona
+end note
+selain->palvelin: POST https://fullstack-exampleapp.herokuapp.com/new_note
+note right of palvelin
+Palvelin tallentaa
+muistiinpanon tietokantaan
+end note
+note left of palvelin
+Palvelin lähettää selaimelle sijainnin /notes
+end note
+palvelin->selain: status 302 Found
+note right of selain
+Selain lataa sijainnin /notes ja pyytää tämän sivun HTML-koodin palvelimelta
+end note
+
+selain->palvelin: GET https://fullstack-exampleapp.herokuapp.com/notes
+palvelin->selain: status 200, sivun HTML-koodi
+note right of selain
+  Selain tulkitsee koodin, ja pyytää palvelimelta 
+  siinä viitatut kaksi lisädokumenttia
+end note
+selain->palvelin: GET https://fullstack-exampleapp.herokuapp.com/main.css
+palvelin->selain: status 200, main.css
+selain->palvelin: GET https://fullstack-exampleapp.herokuapp.com/main.js
+palvelin->selain: status 200, main.js
+note right of selain
+  Selain ajaa main.js- tiedoston koodin, ja pyytää palvelimelta 
+  siinä viitattavan tiedoston data.json, joka sisältää muistiinpanodatan
+  joka nyt sisältää myös käyttäjän juuri syöttämän datan
+end note
+selain->palvelin: GET https://fullstack-exampleapp.herokuapp.com/data.json
+palvelin->selain: status 200, data.json
+note right of selain
+  Selain parsii data.json-tiedoston sisällön, ja lisää sen sivun
+  elementtipuuhun DOM-ohjelmointirajapinnan avulla, kuten
+  main.js-koodi ohjaa tekemään. Tämän jälkeen koodi ajetaan loppuun.
+end note
+note left of selain
+ Sivu on valmis, selain tuottaa sen käyttäjän nähtäville
+ main.css-tiedoston määrällä tyylillä
+end note
+selain->kayttaja:
