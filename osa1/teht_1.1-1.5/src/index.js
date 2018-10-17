@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 const Otsikko=(props) =>{
     return(
     <div>
-        <h1>{props.kurssi.nimi}</h1>
+        <h1>{ props.kurssi.nimi }</h1>
     </div>
     )
 }
@@ -12,7 +12,7 @@ const Otsikko=(props) =>{
 const Osa=(props) => {
     return (
         <div>
-            <p>{props.osa.nimi} {props.osa.tehtavia}</p>
+            <p>{ props.osa.nimi } { props.osa.tehtavia }</p>
         </div>
     )
 }
@@ -23,10 +23,9 @@ const Osa=(props) => {
 const Sisalto=(props) => {
     return(
         <div>
-            <Osa osa={props.kurssi.osat[0]} />
-            <Osa osa={props.kurssi.osat[1]} />
-            <Osa osa={props.kurssi.osat[2]} />
-             
+            <Osa osa={ props.kurssi.osat[0] } />
+            <Osa osa={ props.kurssi.osat[1] } />
+            <Osa osa={ props.kurssi.osat[2] } />
         </div>
     )
 }
@@ -34,7 +33,7 @@ const Sisalto=(props) => {
 const Yhteensa=(props) => {
       return(
         <div>
-            <p>yhteensä {props.kurssi.osat[0].tehtavia+props.kurssi.osat[1].tehtavia+props.kurssi.osat[2].tehtavia} tehtävää </p>
+            <p>yhteensä { props.kurssi.osat[0].tehtavia + props.kurssi.osat[1].tehtavia + props.kurssi.osat[2].tehtavia } tehtävää </p>
         </div>
     )
 }
@@ -60,9 +59,9 @@ const App = () => {
   
   return (
     <div>
-      <Otsikko kurssi={kurssi} />
-      <Sisalto kurssi={kurssi} />
-      <Yhteensa kurssi={kurssi} />
+      <Otsikko kurssi={ kurssi } />
+      <Sisalto kurssi={ kurssi } />
+      <Yhteensa kurssi={ kurssi } />
     </div>
   )
 }

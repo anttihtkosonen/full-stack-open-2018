@@ -19,7 +19,7 @@ const Statistics = ({hyva, neutraali, huono}) => {
         keskiarvo = ((hyva-huono)/(summa)).toFixed(1);
         positiivisia = ((hyva/summa)*100).toFixed(1);
         return (
-            console.log('if'),
+//            console.log('if'),
             <table>
                 <tbody>
                     <Statistic teksti={"Hyvä"} arvo={hyva} />
