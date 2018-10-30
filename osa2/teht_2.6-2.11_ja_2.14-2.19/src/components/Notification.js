@@ -2,15 +2,13 @@
 import React from 'react';
 
 const Notification = ({ message }) => {
-    if (message === null) {
+    if (message === '') {
       return null
     }
 
     return (
       <div className="message">
         {message}
-        <br />
-        <br />
       </div>
     )
 }

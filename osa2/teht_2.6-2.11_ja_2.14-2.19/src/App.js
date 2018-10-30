@@ -58,7 +58,7 @@ class App extends React.Component {
             filter: '',
             message: response.name+' lisättiin palvelimelle'
           })
-          setTimeout(() => {this.setState({message: null})}, 4000)
+          setTimeout(() => {this.setState({message: ''})}, 4000)
     }) 
   }
 
@@ -86,7 +86,7 @@ class App extends React.Component {
             filter: '',
             message: personObj.name + ' numeroa muutettiin'
           })
-        setTimeout(() => {this.setState({message: null})}, 4000)
+        setTimeout(() => {this.setState({message: ''})}, 4000)
         })
       )
 
@@ -126,7 +126,7 @@ class App extends React.Component {
         persons: newPersonsList,
         message: person.name + ' poistettiin palvelimelta'
       })
-      setTimeout(() => {this.setState({message: null})}, 4000)
+      setTimeout(() => {this.setState({message: ''})}, 4000)
     } 
 }
 
