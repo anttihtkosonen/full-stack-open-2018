@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Kannattaako pyöräilykypärän käyttöä suositella",
+  "author": "Antti Kosonen",
+  "url": "https://www.kaupunkifillari.fi/blog/2018/06/10/kannattaako-pyorailykyparan-kayttoa-suositella/",
+  "likes": 35165165
+} 
