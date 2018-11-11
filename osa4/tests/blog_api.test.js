@@ -6,17 +6,17 @@ jest.setTimeout(300000)
 
 const testBlog = 
 {
-  "title": "Kannattaako pyöräilykypärän käyttöä suositella",
-  "author": "Antti Kosonen",
-  "url": "https://www.kaupunkifillari.fi/blog/2018/06/10/kannattaako-pyorailykyparan-kayttoa-suositella/",
+  "title": "Test Blog Title",
+  "author": "Test Blog Author",
+  "url": "Test Blog Url",
   "likes": 35165165
 } 
 
 const testBlogNoLike = 
 {
-  "title": "Sähköpyörien hankintatuki kannattaa toteuttaa",
-  "author": "Matti Koistinen",
-  "url": "https://pyoraliitto.fi/blogi/sahkopyorien-hankintatuki-kannattaa-toteuttaa"
+  "title": "Second Test Blog Title",
+  "author": "Second Test Blog Author",
+  "url": "Second Test Blog Url",
 }
 
 const bigBlogList = [
