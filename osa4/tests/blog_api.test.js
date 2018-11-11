@@ -74,7 +74,7 @@ beforeAll(async () => {
 
 
 
-describe.skip('Working tests', () => {
+//describe.skip('Working tests', () => {
 
 test('blogs are returned as json', async () => {
   await api
@@ -100,7 +100,7 @@ test('a valid blog can be posted', async () => {
 
 //    console.log(titles, response.body)
     expect(response.body.length).toBe(bigBlogList.length+1)
-    expect(titles).toContain("Kannattaako pyöräilykypärän käyttöä suositella")
+    expect(titles).toContain("Test Blog Title")
     
 })
   
@@ -114,7 +114,7 @@ test('a blog without likes set will be posted with zero likes', async () => {
   console.log(newBlog, response.body)
   expect(response.body.likes).toBe(0)
 })
-})
+//})
 
 test('attemping post without title- or url-field will return status 400', async () => {
 
