@@ -53,7 +53,7 @@ const bigBlogList = [
     }  
   ]
 
-describe.skip('list helpers', () => {
+
 
 test('dummy is called', () => {
     const blogs = []
@@ -93,6 +93,4 @@ describe('most likes', () => {
         const result = listHelper.mostLikes(bigBlogList)
         expect(result).toEqual({author: "Edsger W. Dijkstra", likes: 17})
     })
-})
-
 })

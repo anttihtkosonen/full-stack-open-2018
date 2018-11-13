@@ -5,5 +5,6 @@ Content-Type: application/json
   "title": "Kannattaako pyöräilykypärän käyttöä suositella",
   "author": "Antti Kosonen",
   "url": "https://www.kaupunkifillari.fi/blog/2018/06/10/kannattaako-pyorailykyparan-kayttoa-suositella/",
-  "likes": 35165165
+  "likes": 35165165,
+  "userId": "5be9c707051c7e362eab0df8"
 } 
