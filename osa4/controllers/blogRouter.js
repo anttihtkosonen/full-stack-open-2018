@@ -1,6 +1,7 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 blogRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -9,6 +10,13 @@ blogRouter.get('/', async (request, response) => {
   response.json(blogs.map(Blog.format))
 })
 
+const getTokenFrom = (request) => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
 blogRouter.post('/', async (request, response) => {
   try{
@@ -19,7 +27,15 @@ blogRouter.post('/', async (request, response) => {
       if(body.likes===undefined){
         body.likes=0
     }
-    const user = await User.findById(body.userId)
+
+    const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const user = await User.findById(decodedToken.id)
     const blog = new Blog(
       {
         title: body.title,
@@ -35,8 +51,12 @@ blogRouter.post('/', async (request, response) => {
     return response.status(201).json(Blog.format(newBlog))
     }
   }catch (exception) {
+    if (exception.name === 'JsonWebTokenError' ) {
+      response.status(401).json({ error: exception.message })
+    } else {  
     console.log(exception)
     response.status(500).json({ error: 'something went wrong...' })
+    }
   }
 
 })
@@ -59,8 +79,21 @@ blogRouter.get('/:id', async (request, response) => {
 
 blogRouter.delete('/:id', async (request, response) => {
   try {
-    await Blog.findByIdAndRemove(request.params.id)
-    response.status(204).end()
+    const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+    const blog = await Blog.findById(request.params.id)
+    const user = await User.findById(decodedToken.id)
+    if ( blog.user.toString() === decodedToken.id ) {
+      await Blog.findByIdAndRemove(request.params.id)
+      response.status(204).end()
+    } else {
+      return response.status(401).json({ error: 'blog can only be removed by the user that created it' })
+    }
+
+    
   } catch (exception) {
     console.log(exception)
     response.status(400).send({ error: 'malformatted id' })

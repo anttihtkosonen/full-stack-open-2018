@@ -7,7 +7,9 @@ const mongoose = require('mongoose')
 const blogRouter = require('./controllers/blogRouter')
 const usersRouter = require('./controllers/usersRouter')
 const morgan = require('morgan')
+const middleware = require('./utils/middleware')
 const config = require('./utils/config')
+const loginRouter = require('./controllers/loginRouter')
 
 mongoose
   .connect(config.mongoUrl, { useNewUrlParser: true })
@@ -28,10 +30,11 @@ if (process.env.NODE_ENV !== 'production') {
   }
 app.use(cors())
 app.use(bodyParser.json())
-app.use(express.static('build'))
-
+//app.use(express.static('build'))
+app.use(middleware.tokenExtractor)
 app.use('/api/blogs', blogRouter)
 app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
 
 const server = http.createServer(app)
 
