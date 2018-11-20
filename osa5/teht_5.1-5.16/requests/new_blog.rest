@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs 
+content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik5ld3VzZXIiLCJpZCI6IjViZjMwNzFiMmZkOWI1NGNiZjNkOTgzZCIsImlhdCI6MTU0MjY1MzczOH0.IW3DtqcLIrE87Qj-qGS4sIxJquUNC2uKpxG5ltbmZYI
+
+{
+  "title": "Ploki",
+  "author": "Timo Soini",
+  "url": "https://www.vihrealanka.fi/plokinaattori/",
+  "likes": 0
+}
