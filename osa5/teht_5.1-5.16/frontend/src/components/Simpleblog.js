@@ -1,11 +1,11 @@
 import React from 'react'
 
 const SimpleBlog = ({ blog, onClick }) => (
-  <div>
-    <div>
+  <div className="wrapper">
+    <div className="content">
       {blog.title} {blog.author}
     </div>
-    <div>
+    <div className="content">
       blog has {blog.likes} likes
       <button onClick={onClick}>like</button>
     </div>

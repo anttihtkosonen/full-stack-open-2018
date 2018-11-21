@@ -43,7 +43,6 @@ class Blog extends React.Component {
   }
 }
 Blog.propTypes = {
-  key: PropTypes.string.isRequired,
   blog: PropTypes.object.isRequired,
   handleLikeClick: PropTypes.func.isRequired,
   deleteBlog: PropTypes.func.isRequired,
