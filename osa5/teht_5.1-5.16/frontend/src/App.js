@@ -155,39 +155,36 @@ class App extends React.Component {
 
   render() {
 
-
-    if (this.state.user === null) {
-      return (
+    const loginForm = () => (
         <div>
-        <Notification message={this.state.message}/>  
-        <h2>Log in to application</h2>
-    
-        <form onSubmit={this.login}>
-          <div>
-            username
-            <input
-              type="text"
-              name="username"
-              value={this.state.username}
-              onChange={this.handleFieldChange}
-            />
-          </div>
-          <div>
-            Password
-            <input
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleFieldChange}
-            />
-          </div>
-          <button type="submit">Log in</button>
-        </form>
+          <Notification message={this.state.message}/>  
+          <h2>Log in to application</h2>
+      
+          <form onSubmit={this.login}>
+            <div>
+              username
+              <input
+                type="text"
+                name="username"
+                value={this.state.username}
+                onChange={this.handleFieldChange}
+              />
+            </div>
+            <div>
+              Password
+              <input
+                type="password"
+                name="password"
+                value={this.state.password}
+                onChange={this.handleFieldChange}
+              />
+            </div>
+            <button type="submit">Log in</button>
+          </form>
       </div>
-      )
-    }
+    )
 
-    return (
+    const loggedInPage = () => (
       <div>
         <Notification message={this.state.message}/>
         <h2>blogs</h2>
@@ -210,10 +207,16 @@ class App extends React.Component {
           showDeleteButton={ blog.user.username === this.state.user.username || blog.user === null }
           />
         )}
+      </div>
+    )
 
+    return (
+      <div>
+        { this.state.user===null ? loginForm() : loggedInPage() }
       </div>
     );
   }
+
 }
 
 export default App;
