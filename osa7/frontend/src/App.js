@@ -12,7 +12,7 @@ import { readLoginState, logout } from './reducers/loginReducer'
 
 class App extends React.Component {
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.readLoginState()
     this.props.initializeUsers()
     this.props.initializeBlogs()

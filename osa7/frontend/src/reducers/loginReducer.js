@@ -34,9 +34,10 @@ export const login = ( username, password ) => {
       blogService.setToken(user.token)
       dispatch({
         type: 'LOGIN',
-        data: user
+        content: user
       })
     }
+    
     catch (exception) {
       dispatch({
         type: 'NOTIFY',
@@ -51,13 +52,14 @@ export const login = ( username, password ) => {
     }
   }
 }
+
 export const logout = () => {
   return async (dispatch) => {
     window.localStorage.removeItem('loggedBlogAppUser')
     blogService.setToken(null)
     dispatch({
-      type: 'LOGIN_ACTION',
-      data: null
+      type: 'LOGIN',
+      content: null
     })
   }
 }

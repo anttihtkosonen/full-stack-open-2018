@@ -13,9 +13,9 @@ class LoginForm extends React.Component {
       e.target.username.value = ''
       e.target.password.value = ''
       this.props.login(username, password)
-      this.props.notify('welcome back!')
+      this.props.notify('Welcome back!')
     } catch (exception) {
-      this.notify('Käyttäjätunnus tai salasana virheellinen', 3000)
+      this.notify('Käyttäjätunnus tai salasana on virheellinen', 3000)
     }
   }
 
