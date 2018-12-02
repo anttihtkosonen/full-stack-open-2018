@@ -25,6 +25,7 @@ class Blog extends React.Component {
 
   render() {
     const { blog } = this.props
+    console.log('blog: ', blog)
 
     const blogStyle = {
       paddingTop: 10,
@@ -43,7 +44,7 @@ class Blog extends React.Component {
 
     //const deletable = this.blog.user === undefined || this.blog.user.username === this.blog.user.username
     const deletable = true
-    
+
     return (
       <div style={blogStyle}>
         <div 
@@ -71,9 +72,8 @@ class Blog extends React.Component {
 
 
 const mapStateToProps = (state, ownProps) => {
-  const blog = state.blogs.find(i => i._id === ownProps.blogId)
   return {
-    blog: blog
+    blog: state.blogs.find(i => i._id === ownProps.blogId)
   }
 }
 

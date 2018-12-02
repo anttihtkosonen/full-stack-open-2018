@@ -8,6 +8,7 @@ class BlogList extends React.Component {
 
 render(){
   const blogs = this.props.blogs
+  console.log('blogs: ',blogs)
   return (
   <div>
     <h2>Blogs</h2>
