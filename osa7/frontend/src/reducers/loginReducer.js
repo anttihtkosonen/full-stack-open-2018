@@ -5,6 +5,8 @@ const loginReducer = (store = null, action) => {
   switch(action.type) {
   case 'LOGIN':
     return action.content
+  case 'LOGOUT':
+    return null
   default:
     return store
   }
@@ -12,9 +14,11 @@ const loginReducer = (store = null, action) => {
 export const readLoginState = () => {
   return async (dispatch) => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
+    console.log('loggedUserJSON: ',loggedUserJSON)
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       blogService.setToken(user.token)
+      console.log('login dispatched')
       dispatch({
         type: 'LOGIN',
         content: user
@@ -25,42 +29,30 @@ export const readLoginState = () => {
 
 export const login = ( username, password ) => {
   return async (dispatch) => {
-    try {
-      const user = await loginService.login({
+      const loggedUser = await loginService.login({
         username: username,
         password: password
       })
-      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
-      blogService.setToken(user.token)
+      console.log('loggedUser: ',loggedUser)
+      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(loggedUser))
+      blogService.setToken(loggedUser.token)
       dispatch({
         type: 'LOGIN',
-        content: user
+        content: loggedUser
       })
-    }
-    
-    catch (exception) {
-      dispatch({
-        type: 'NOTIFY',
-        content: 'käyttäjätunnus tai salasana virheellinen'
-      })
-      setTimeout(() => {
-        dispatch({
-          type: 'RESET',
-          content: ''
-        })
-      }, 4000)
-    }
   }
 }
 
 export const logout = () => {
+  console.log('logout')
   return async (dispatch) => {
     window.localStorage.removeItem('loggedBlogAppUser')
     blogService.setToken(null)
     dispatch({
-      type: 'LOGIN',
+      type: 'LOGOUT',
       content: null
     })
   }
 }
+
 export default loginReducer

@@ -26,7 +26,7 @@ class BlogForm extends React.Component {
  render(){
   return (
     <div>
-      <h2>Luo uusi blogi</h2>
+      <h2>Create a new blog</h2>
 
       <form onSubmit={this.handleSubmit}>
         <div>
@@ -48,7 +48,7 @@ class BlogForm extends React.Component {
           />
         </div>        
 
-        <button type="submit">Luo</button>
+        <button type="submit">Submit</button>
       </form>
     </div>
    )

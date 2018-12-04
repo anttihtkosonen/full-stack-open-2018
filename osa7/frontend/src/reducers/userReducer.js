@@ -1,15 +1,19 @@
 import users from '../services/users'
 
 const reducer = (store = [], action) => {
-    switch (action) {
-        case 'INITIALIZE':
-        return store = action.content
-        case 'CREATE':
-        return store.concat(action.content)
-        default:
-        return store
-    }
+  if (action.type === 'CREATE_USER') {
+    console.log(action.content)
+    return store.concat(action.content)
+  }
+  if (action.type === 'INITIALIZE_USERS') {
+    return store = action.content
+  }
+  console.log('users requested from store')
+  return store
 }
+
+
+
 
 export const createUser = (username, name, password, adult) => {
     return async (dispatch) => {
@@ -21,7 +25,7 @@ export const createUser = (username, name, password, adult) => {
       }
       const user = await users.create(userObj)
       dispatch({
-        type: 'CREATE',
+        type: 'CREATE_USER',
         user: {user}
       })
     }
@@ -29,10 +33,11 @@ export const createUser = (username, name, password, adult) => {
 
 export const initializeUsers = () => {
     return async (dispatch) => {
-      const content = await users.getAll()
+      const initialUsers = await users.getAll()
+      console.log('initialized users: ',initialUsers)
       dispatch({
-        type: 'INITIALIZE',
-        content
+        type: 'INITIALIZE_USERS',
+        content: initialUsers
       })
     }
   }

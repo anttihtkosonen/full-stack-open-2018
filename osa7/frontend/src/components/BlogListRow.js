@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { notify } from '../reducers/notificationReducer'
 
-class Blog extends React.Component {
+class BlogListRow extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -25,8 +25,6 @@ class Blog extends React.Component {
 
   render() {
     const { blog } = this.props
-    console.log('blog: ', blog)
-
     const blogStyle = {
       paddingTop: 10,
       paddingLeft: 2,
@@ -73,10 +71,10 @@ class Blog extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    blog: state.blogs.find(i => i._id === ownProps.blogId)
+    blog: state.blogs.find(i => i._id === ownProps.blogID)
   }
 }
 
 
 
-export default connect(mapStateToProps, { likeBlog, removeBlog, notify })(Blog)
+export default connect(mapStateToProps, { likeBlog, removeBlog, notify })(BlogListRow)

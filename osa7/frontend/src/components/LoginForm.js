@@ -12,10 +12,11 @@ class LoginForm extends React.Component {
       const password = e.target.password.value
       e.target.username.value = ''
       e.target.password.value = ''
+      console.log('username: ',username)
       this.props.login(username, password)
-      this.props.notify('Welcome back!')
+      this.props.notify('Welcome Back', 5000)
     } catch (exception) {
-      this.notify('Käyttäjätunnus tai salasana on virheellinen', 3000)
+      this.notify('Username or password is invalid', 3000)
     }
   }
 
@@ -26,18 +27,18 @@ class LoginForm extends React.Component {
         <h2>Kirjaudu sovellukseen</h2>
         <form onSubmit={this.handleSubmit}>
           <div>
-            käyttäjätunnus
+            Username
             <input
               name="username"
             />
           </div>
           <div>
-              salasana
+              Password
               <input
               name="password"
             />
           </div>
-          <button type="submit">Kirjaudu</button>
+          <button type="submit">Log in</button>
         </form>
       </div>
     )

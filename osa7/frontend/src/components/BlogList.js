@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Blog from './Blog'
+import BlogListRow from './BlogListRow'
 
 
 
@@ -13,7 +13,8 @@ render(){
   <div>
     <h2>Blogs</h2>
     {blogs.map(blog => 
-      <Blog 
+      <BlogListRow 
+        blogID = {blog._id}
         key={blog._id}         
       />
     )}
