@@ -8,11 +8,20 @@ blogRouter.get('/', async (request, response) => {
     .find({})
     .populate('user', {username: 1, name: 1})
 
-  response.json(blogs)
+  response.json(blogs.map(Blog.format))
 })
 
+blogRouter.get('/:id/comments', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  response.json(blog.comments)
+
+})
+
+
+
+
 blogRouter.post('/', async (request, response) => {
-  const { title, author, url, likes } = request.body
+  const { title, author, url, likes, comments } = request.body
 
   try {
     const token = request.token
@@ -28,9 +37,17 @@ blogRouter.post('/', async (request, response) => {
 
     const user = await User.findById(decodedToken.id)
 
-    const blog = new Blog({ title, author, url, likes: (likes || 0), user: user._id } )
+    const blog = new Blog({ 
+      title, 
+      author, 
+      url, 
+      likes: ( likes || 0 ), 
+      user: user._id, 
+      comments: ( comments || [] ) 
+    })
 
     const result = await blog.save()
+    console.log('result: ', result)
 
     user.blogs = user.blogs.concat(blog._id)
     await user.save()
@@ -44,6 +61,27 @@ blogRouter.post('/', async (request, response) => {
       response.status(500).json({ error: 'something went wrong...' })
     }
   }
+})
+
+blogRouter.post('/:id/comments', async (request, response) => {
+  const comment = request.body.comment
+  const blog = await Blog.findById(request.params.id)
+  console.log('blog at blogRouter: ', blog)
+  console.log('comment at blogrouter: ', comment)
+  try {
+
+    if (comment === undefined ||  comment === null) {
+      return response.status(400).json({ error: 'Comment is empty or undefined'})
+    }
+    blog.comments.concat(comment)
+    const result = await blog.save()
+    console.log('result: ', result)
+
+    response.status(201).json(result)
+  } catch (exception) {
+      console.log(exception)
+      response.status(500).json({ error: 'something went wrong...' })
+    }
 })
 
 blogRouter.delete('/:id', async (request, response) => {
@@ -79,8 +117,8 @@ blogRouter.delete('/:id', async (request, response) => {
 })
 
 blogRouter.put('/:id', async (request, response) => {
-  const { title, author, url, likes } = request.body
-  const blog = await Blog.findByIdAndUpdate(request.params.id, { title, author, url, likes } , {new: true})
+  const { title, author, url, likes, comments } = request.body
+  const blog = await Blog.findByIdAndUpdate(request.params.id, { title, author, url, likes, comments } , {new: true})
   
   response.send(blog)
 })

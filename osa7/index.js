@@ -20,6 +20,9 @@ const extractToken = (request, response, next) => {
 }
 
 
+
+
+
 morgan.token('content', function (req, res) { return JSON.stringify(req.body) })
 app.use(morgan(':method :url :content :status :res[content-length] - :response-time ms'))
 
@@ -29,8 +32,11 @@ app.use(extractToken)
 app.use(cors())
 app.use(bodyParser.json())
 
+
 mongoose.connect(config.mongoUrl)
 mongoose.Promise = global.Promise
+
+
 
 app.use('/api/login', loginRouter)
 app.use('/api/users', usersRouter)

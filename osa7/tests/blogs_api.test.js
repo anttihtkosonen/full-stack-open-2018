@@ -3,8 +3,10 @@ const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const bcrypt = require('bcrypt')
 
-const { filter, blogsInDb, usersInDb, initialBlogs } = require('./test_helper2')
+const { filter, blogsInDb, usersInDb, initialUsers, initialBlogs } = require('./test_helper')
+
 
 beforeAll(async () => {
   await Blog.remove({})
@@ -14,6 +16,14 @@ beforeAll(async () => {
 
   blog = new Blog(initialBlogs[1])
   await blog.save()
+
+  let user = new User(initialUsers[0])
+  await user.save()
+
+  const loginInfo = {
+    username: initialUsers[0].username,
+    password: initialUsers[0].password
+  }
 })
 
 test('blogs are returned as json', async () => {
@@ -31,16 +41,23 @@ test('blogs are returned as json', async () => {
 
 test('a new blog can be created', async () => {
   const blogsInitially = await blogsInDb()
-
+  const login = await api
+  .post('/api/login')
+  .send(loginInfo)
+  .expect(200)
+  .expect('Content-Type', /application\/json/)
+  const token = login.body.token
   const newBlog = {
     author: 'Matti Luukkainen',
     title: 'osa 4',
     url: 'http://localhost:4000/osa4/',
     likes: 2,
+    comments: []
   }
 
   const posti = await api
     .post('/api/blogs')
+    .set({ Authorization: 'bearer ' + token })
     .send(newBlog)
 
   const blogsInApp = (await blogsInDb()).map(filter)
@@ -54,10 +71,18 @@ test('a new blog gets by default 0 likes', async () => {
     author: 'Matti Luukkainen',
     title: 'osa 4',
     url: 'http://localhost:4000/osa4/',
+    comments: []
   }
+  const login = await api
+  .post('/api/login')
+  .send(loginInfo)
+  .expect(200)
+  .expect('Content-Type', /application\/json/)
+  const token = login.body.token
 
   await api
     .post('/api/blogs')
+    const token = login.body.token
     .send(newBlog)
 
   const blogsAfterOperation = await api
@@ -76,9 +101,15 @@ test('if a required field missing, blog is not created ', async () => {
   }
 
   const blogsBeforeOperation = await blogsInDb()
-
+  const login = await api
+  .post('/api/login')
+  .send(loginInfo)
+  .expect(200)
+  .expect('Content-Type', /application\/json/)
+  const token = login.body.token
   await api
     .post('/api/blogs')
+    .set({ Authorization: 'bearer ' + token })
     .send(newBlog)
     .expect(400)
 
@@ -87,7 +118,9 @@ test('if a required field missing, blog is not created ', async () => {
   expect(blogsBeforeOperation.body).toEqual(blogsAfterOperation.body)
 })
 
-test('contents of a blog can be alteder', async () => {
+
+
+test('contents of a blog can be altered', async () => {
   const blogsBeforeOperation = await blogsInDb()
 
   const blogToAlter = blogsBeforeOperation[0]
@@ -98,9 +131,16 @@ test('contents of a blog can be alteder', async () => {
     url: blogToAlter.url,
     likes: blogToAlter.likes + 1
   }
+  const login = await api
+  .post('/api/login')
+  .send(loginInfo)
+  .expect(200)
+  .expect('Content-Type', /application\/json/)
+  const token = login.body.token
 
   await api
     .put(`/api/blogs/${blogToAlter._id}`)
+    .set({ Authorization: 'bearer ' + token })
     .send(alteredBlog)
     .expect(200)
 
@@ -113,8 +153,16 @@ test('a blog can be deleted', async () => {
 
   const blogToDelete = blogsBeforeOperation[0]
 
+  const login = await api
+  .post('/api/login')
+  .send(loginInfo)
+  .expect(200)
+  .expect('Content-Type', /application\/json/)
+  const token = login.body.token
+
   await api
     .delete(`/api/blogs/${blogToDelete._id}`)
+    .set({ Authorization: 'bearer ' + token })
     .expect(204)
 
   const blogsAfterOperation = await blogsInDb()
@@ -123,13 +171,39 @@ test('a blog can be deleted', async () => {
   expect(blogsAfterOperation.map(filter)).not.toContainEqual(filter(blogToDelete))
 })
 
+test('comment can be added', async () => {
+  const blogsBeforeOperation = await blogsInDb()
 
-describe('cereation of new users', () => {
+  const blogToComment = blogsBeforeOperation[0]
+
+  const comment = 'Test comment'
+
+  const login = await api
+  .post('/api/login')
+  .send(loginInfo)
+  .expect(200)
+  .expect('Content-Type', /application\/json/)
+  const token = login.body.token
+
+
+  await api
+    .post(`/api/blogs/${blogToComment._id}/comments`)
+    .set({ Authorization: 'bearer ' + token })
+    .send(comment)
+    .expect(200)
+
+  const blogsAfterOperation = await blogsInDb()
+  const commentedBlogAfter = blogsAfterOperation.findById(blogToComment._id)
+  expect(commentedBlogAfter.comments).toContainEqual(comment)
+})
+
+
+describe('creation of new users', () => {
   beforeAll(async () => {
     const user = new User({
       username: 'hellas',
       name: 'Arto Hellas',
-      adult: false
+      adult: false,
     })
 
     await user.save()
@@ -201,6 +275,8 @@ describe('cereation of new users', () => {
   })
 
 })
+
+describe 
 
 afterAll(() => {
   server.close()
