@@ -1,7 +1,7 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import App from './App'
-import Blog from './components/Blog'
+import { mount } from 'enzyme'
+import SingleBlog from './components/SingleBlog'
 
 describe('<App />', () => {
   let app
@@ -14,7 +14,7 @@ describe('<App />', () => {
     it('when user is not logged, only the login form us shown', () => {
       const form = app.find('form')
       expect(form.length).toBe(1)
-      const blogs = app.find(Blog)
+      const blogs = app.find(SingleBlog)
       expect(blogs.length).toBe(0)
     })
   })
@@ -28,7 +28,7 @@ describe('<App />', () => {
     it('all notes are rendered', () => {
       app.update()
 
-      const blogs = app.find(Blog)
+      const blogs = app.find(SingleBlog)
       expect(blogs.length).toBe(2)
     })
   })

@@ -3,9 +3,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { notify } from '../reducers/notificationReducer'
 import { createBlog } from '../reducers/blogReducer'
+import { Button, Form } from 'semantic-ui-react'
 
 class BlogForm extends React.Component {
- 
+
   handleSubmit = (e) => {
     e.preventDefault()
 
@@ -13,46 +14,45 @@ class BlogForm extends React.Component {
       title: e.target.title.value,
       author: e.target.author.value,
       url: e.target.url.value,
-    } 
+    }
     e.target.title.value = ''
     e.target.author.value = ''
     e.target.url.value = ''
-    
+
     this.props.createBlog(blogObj)
-    this.props.notify(`anecdote ${blogObj.title} created`, 5000)
+    this.props.notify(`Blog ${blogObj.title} created`, 5000)
 
   }
- 
- render(){
-  return (
-    <div>
-      <h2>Create a new blog</h2>
 
-      <form onSubmit={this.handleSubmit}>
-        <div>
-          title
-          <input
-            name='title'
-          />
-        </div>
-        <div>
-          author
-          <input
-            name='author'
-          />
-        </div>
-        <div>
-          url
-          <input
-            name='url'
-          />
-        </div>        
+  render(){
+    const headingStyle = {
+      paddingTop: 10,
+      paddingBottom: 10,
+    }
+    return (
+      <div>
+        <h2 style = {headingStyle}>Create a new blog</h2>
 
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-   )
-   }
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Field>
+            <label>Title</label>
+            <input input name='title' placeholder='Blog title'/>
+          </Form.Field>
+          <Form.Field>
+            <label>Author</label>
+            <input name='author' placeholder='Blog author' />
+          </Form.Field>
+          <Form.Field>
+            <label>Url</label>
+            <input input name='url' placeholder='Blog address'/>
+          </Form.Field>
+
+          <Button type="submit">Submit</Button>
+
+        </Form>
+      </div>
+    )
+  }
 
 /*
   BlogForm.propTypes = {

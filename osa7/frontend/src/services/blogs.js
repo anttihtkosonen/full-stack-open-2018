@@ -1,6 +1,8 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
+
+
 let token = null
 
 const config = () => {
@@ -20,6 +22,15 @@ const setToken = (newToken) => {
 
 const create = async (newObject) => {
   const response = await axios.post(baseUrl, newObject, config())
+  console.log('response.data: ',response.data)
+  return response.data
+}
+
+const comment = async (id, comment) => {
+  console.log('comment at service: ', comment)
+  const commentObj = {comment: comment}
+  const response = await axios.post(`${baseUrl}/${id}/comments`, commentObj, config())
+  console.log('response.data: ', response.data)
   return response.data
 }
 
@@ -33,4 +44,11 @@ const remove = (id) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, remove, setToken }
+export default { 
+  getAll, 
+  create, 
+  comment,
+  update, 
+  remove, 
+  setToken 
+}

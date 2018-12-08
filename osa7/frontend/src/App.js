@@ -13,7 +13,8 @@ import { notify } from './reducers/notificationReducer'
 import { initializeUsers } from './reducers/userReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { readLoginState, logout } from './reducers/loginReducer'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Container } from 'semantic-ui-react'
 
 
 class App extends React.Component {
@@ -22,7 +23,7 @@ class App extends React.Component {
     this.props.readLoginState()
     this.props.initializeUsers()
     this.props.initializeBlogs()
-  } 
+  }
 
 
 
@@ -39,6 +40,7 @@ class App extends React.Component {
     }
 
     return (
+      <Container>
         <Router>
           <div>
             <Notification store={this.props.store} />
@@ -47,13 +49,14 @@ class App extends React.Component {
             <Togglable buttonLabel='New blog'>
               <BlogForm store={this.props.store} />
             </Togglable>
-              <Route exact path='/' render={() => <BlogList store={this.props.store} /> } />
-              <Route exact path="/blogs/:id" render={({match}) =><SingleBlog blogID={(match.params.id)} store={this.props.store} /> } />
-              <Route exact path='/users' render={() => <UserList store={this.props.store}/> } />
-              <Route exact path="/users/:id" render={({match}) =><SingleUser store={this.props.store} userID={(match.params.id)} /> } />
+            <Route exact path='/' render={() => <BlogList store={this.props.store} /> } />
+            <Route exact path="/blogs/:id" render={({ match }) => <SingleBlog blogID={(match.params.id)} store={this.props.store} /> } />
+            <Route exact path='/users' render={() => <UserList store={this.props.store}/> } />
+            <Route exact path="/users/:id" render={({ match }) => <SingleUser store={this.props.store} userID={(match.params.id)} /> } />
           </div>
         </Router>
-    );
+      </Container>
+    )
   }
 }
 

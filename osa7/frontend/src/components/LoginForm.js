@@ -4,7 +4,7 @@ import { notify } from '../reducers/notificationReducer'
 import { login } from '../reducers/loginReducer'
 
 class LoginForm extends React.Component {
- 
+
   handleSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -24,7 +24,7 @@ class LoginForm extends React.Component {
   render(){
     return (
       <div>
-        <h2>Kirjaudu sovellukseen</h2>
+        <h2>Log in to</h2>
         <form onSubmit={this.handleSubmit}>
           <div>
             Username
@@ -34,7 +34,7 @@ class LoginForm extends React.Component {
           </div>
           <div>
               Password
-              <input
+            <input
               name="password"
             />
           </div>

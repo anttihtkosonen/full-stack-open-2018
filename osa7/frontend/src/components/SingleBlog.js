@@ -1,80 +1,105 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { likeBlog, removeBlog, commentBlog } from '../reducers/blogReducer'
 import { notify } from '../reducers/notificationReducer'
+import { Redirect } from 'react-router'
+import { Loader } from 'semantic-ui-react'
 
-class Blog extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      visible: false
-    }
+class SingleBlog extends React.Component {
+  like = () => async () => {
+    console.log('like: ',this.props.blog)
+    this.props.likeBlog(this.props.blog)
+    this.props.notify(`blog ${this.props.blog.title} liked`, 5000)
   }
 
-  like = (blog) => async () => {
-    console.log('like: ',blog)
-    this.props.likeBlog(blog)
-    this.props.notify(`blog ${blog.title} liked`, 5000)
+  remove = () => async (history) => {
+    console.log('remove: ',this.props.blog)
+    this.props.removeBlog(this.props.blog)
+    this.props.notify(`blog ${this.props.blog.title} removed`, 5000)
   }
 
-  remove = (blog) => async () => {
-    console.log('remove: ',blog)
-    this.props.removeBlog(blog)
-    this.props.notify(`blog ${blog.title} removed`, 5000)
+  comment = (e) =>  {
+    e.preventDefault()
+    const comment =  e.target.comment.value
+    console.log('comment: ',comment)
+    e.target.comment.value = ''
+    this.props.commentBlog(this.props.blog, comment)
+    this.props.notify(`Comment added: ${comment}`, 5000)
   }
 
   render() {
-    const { blog } = this.props
-    const blogStyle = {
-      paddingTop: 10,
-      paddingLeft: 2,
-      border: 'solid',
-      borderWidth: 1,
-      marginBottom: 5
+    const { blog, blogs, login } = this.props
+    console.log('blogs: ', blogs)
+    console.log('blog: ', blog)
+
+
+
+    if (blogs.length===0) {
+      return (
+        <div>
+          <Loader active inline='centered'>Loading</Loader>
+        </div>
+      )
     }
 
-    const contentStyle = {
-      display: this.state.visible? '' : 'none',
-      margin: 5,
-    }
+    if (blogs.length !==0 && blog===undefined )
+      return(
+        <Redirect to="/" />
+      )
 
     const adder = blog.user ? blog.user.name : 'anonymous'
-
-    //const deletable = this.blog.user === undefined || this.blog.user.username === this.blog.user.username
-    const deletable = true
+    const deletable = blog.user === undefined || blog.user.username === login.username
 
     return (
-      <div style={blogStyle}>
-        <div 
-          onClick={() => this.setState({ visible: !this.state.visible })} 
-          className='name'
-        >
-          {blog.title} {blog.author}
+      <div>
+        <h1>{blog.title} </h1>
+        <div>
+          {blog.author}
         </div>
-        <div style={contentStyle} className='content'>
-          <div>
-            <a href={blog.url}>{blog.url}</a>
-          </div>
-          <div>
-            {blog.likes} likes <button onClick={this.like(blog)}>like</button>
-          </div>
-          <div>
+        <div>
+          <a href={blog.url}>{blog.url}</a>
+        </div>
+        <div>
+          {blog.likes} likes <button onClick={this.like()}>like</button>
+        </div>
+        <div>
             added by {adder}
-          </div>
-          {deletable && <div><button onClick={this.remove(blog)}>delete</button></div>}
         </div>
-      </div>  
+        <div>
+          {deletable && <div><button onClick={this.remove()}>delete</button></div>}
+        </div>
+        <div>
+          <h3>Comments</h3>
+          <ul>
+            {blog.comments.map((comment, i) =>
+              <li key={i}>
+                {comment}
+              </li>
+            )}
+          </ul>
+          <form onSubmit={this.comment}>
+            <div>
+              <input
+                name='comment'
+              />
+            </div>
+            <button type="submit">Add comment</button>
+          </form>
+        </div>
+      </div>
     )
   }
 }
 
 
+
 const mapStateToProps = (state, ownProps) => {
   return {
-    blog: state.blogs.find(i => i._id === ownProps.blogId)
+    blog: state.blogs.find(blog => blog._id === ownProps.blogID),
+    blogs: state.blogs,
+    login: state.login
   }
 }
 
 
-
-export default connect(mapStateToProps, { likeBlog, removeBlog, notify })(Blog)
+export default connect(mapStateToProps, { likeBlog, removeBlog, commentBlog, notify })(SingleBlog)

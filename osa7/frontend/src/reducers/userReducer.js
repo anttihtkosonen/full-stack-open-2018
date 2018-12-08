@@ -26,7 +26,7 @@ export const createUser = (username, name, password, adult) => {
       const user = await users.create(userObj)
       dispatch({
         type: 'CREATE_USER',
-        user: {user}
+        content: user
       })
     }
   }
